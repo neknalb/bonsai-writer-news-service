@@ -86,6 +86,9 @@ app.notFound((c) => {
   }, 404)
 })
 
+// Export app for testing
+export { app }
+
 // Start server
 const port = 8000
 console.log(`🚀 Whats-New API running on http://localhost:${port}`)

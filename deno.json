@@ -12,5 +12,8 @@
     ],
     "include": [],
     "entrypoint": "main.ts"
+  },
+  "fmt": {
+    "singleQuote": true
   }
 }

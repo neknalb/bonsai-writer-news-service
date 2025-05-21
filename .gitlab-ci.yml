@@ -1,4 +1,3 @@
-
 image: denoland/deno:latest
 stages:
   - test

@@ -4,5 +4,13 @@
   },
   "tasks": {
     "start": "deno run --allow-net --watch main.ts"
+  },
+  "deploy": {
+    "project": "bw-whats-new",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }

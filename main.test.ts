@@ -1,6 +1,20 @@
 import { assertEquals } from 'jsr:@std/assert';
 import { app } from './main.ts';
 
+Deno.test('Root route returns API information', async () => {
+  const response = await app.request('/');
+  const data = await response.json();
+
+  assertEquals(response.status, 200);
+  assertEquals(data, {
+    message: 'News API',
+    version: '1.0.0',
+    endpoints: {
+      'GET /news': 'Get available news ordered by date',
+    },
+  });
+});
+
 Deno.test('Unknown routes return 404 with correct error message', async () => {
   const testPath = '/foobar';
   const response = await app.request(testPath);

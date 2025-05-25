@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getAllNewsOrderedByDate, NewsOfADate } from './newsData.ts';
+import newsRoutes from './routes/newsRoutes.ts';
 
 // Create Hono app
 const app = new Hono();
@@ -15,7 +15,7 @@ app.use('*', async (c, next) => {
 // Root route
 app.get('/', (c) => {
   return c.json({
-    message: 'Whats-New API',
+    message: 'News API',
     version: '1.0.0',
     endpoints: {
       'GET /news': 'Get available news ordered by date',
@@ -23,23 +23,8 @@ app.get('/', (c) => {
   });
 });
 
-interface AllNewsResponse {
-  total: number;
-  result: Array<NewsOfADate>;
-}
-
-// Route for all available dates
-app.get('/news', (c) => {
-  // Search for news for the given date
-  const news = getAllNewsOrderedByDate();
-
-  const response: AllNewsResponse = {
-    total: news.length,
-    result: news,
-  };
-
-  return c.json(response);
-});
+// News route
+app.route('/news', newsRoutes);
 
 // Error handling for unknown routes
 app.notFound((c) => {

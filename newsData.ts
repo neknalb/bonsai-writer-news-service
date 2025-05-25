@@ -1,30 +1,26 @@
-// Interface for news entries
-export interface NewsEntry {
-  id: string;
-  date: string;
+interface News {
   title: string;
   content: string;
 }
 
-export function getNewsData(date: string): NewsEntry | undefined {
-  return newsData.get(date);
+export interface NewsOfADate extends News {
+  date: string;
 }
 
-export function getAvailableDates(): Array<string> {
-  return [...newsData.keys()];
+export function getAllNewsOrderedByDate(): Array<NewsOfADate> {
+  return Array.from(newsData.entries()).map(([date, entry]) => ({
+    date,
+    ...entry,
+  }));
 }
 
 // Sample data (replace with real database later)
-const newsData: Map<string, NewsEntry> = new Map([
+const newsData: Map<string, News> = new Map([
   ['2023-04-01', {
-    id: '1',
-    date: '2023-04-01',
     title: 'April Fools Day',
     content: 'Hello world! LOL',
   }],
   ['2023-04-02', {
-    id: '2',
-    date: '2023-04-02',
     title: 'Birthday',
     content: 'Today, Michaela has brithday!',
   }],

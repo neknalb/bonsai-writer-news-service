@@ -1,11 +1,5 @@
 import { Hono } from 'hono';
-import { getAvailableDates, getNewsData, NewsEntry } from './newsData.ts';
-
-// Interface for API response
-interface WhatsNewResponse {
-  date: string;
-  news: NewsEntry | null;
-}
+import { getAllNewsOrderedByDate, NewsOfADate } from './newsData.ts';
 
 // Create Hono app
 const app = new Hono();
@@ -18,70 +12,40 @@ app.use('*', async (c, next) => {
   await next();
 });
 
-// Utility function for date validation
-function isValidDate(dateString: string): boolean {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!regex.test(dateString)) return false;
-
-  const date = new Date(dateString);
-  return date instanceof Date && !isNaN(date.getTime());
-}
-
 // Root route
 app.get('/', (c) => {
   return c.json({
     message: 'Whats-New API',
     version: '1.0.0',
     endpoints: {
-      'GET /whats-new/:date': 'Get news for a specific date (YYYY-MM-DD)',
+      'GET /news': 'Get available news ordered by date',
     },
   });
 });
 
-// Main route for news queries
-app.get('/whats-new/:date', (c) => {
-  const date = c.req.param('date');
+interface AllNewsResponse {
+  total: number;
+  result: Array<NewsOfADate>;
+}
 
-  // Date validation
-  if (!isValidDate(date)) {
-    return c.json({
-      error: 'Invalid date format. Please use YYYY-MM-DD format.',
-    }, 400);
-  }
-
+// Route for all available dates
+app.get('/news', (c) => {
   // Search for news for the given date
-  const news = getNewsData(date);
+  const news = getAllNewsOrderedByDate();
 
-  if (!news) {
-    return c.json({
-      error: `No news found for date ${date}`,
-      date: date,
-    }, 404);
-  }
-
-  const response: WhatsNewResponse = {
-    date: date,
-    news: news,
+  const response: AllNewsResponse = {
+    total: news.length,
+    result: news,
   };
 
   return c.json(response);
-});
-
-// Route for all available dates
-app.get('/whats-new', (c) => {
-  const availableDates = getAvailableDates();
-  return c.json({
-    message: 'Available dates',
-    dates: availableDates,
-    total: availableDates.length,
-  });
 });
 
 // Error handling for unknown routes
 app.notFound((c) => {
   return c.json({
     error: 'Route not found',
-    message: 'Use /whats-new/:date to get news for a specific date',
+    message: 'Use /news to get available news ordered by date',
   }, 404);
 });
 
@@ -89,7 +53,7 @@ app.notFound((c) => {
 export { app };
 
 // Start server
-const port = 8000;
+const port = 5042;
 console.log(`🚀 Whats-New API running on http://localhost:${port}`);
 
 Deno.serve({ port }, app.fetch);

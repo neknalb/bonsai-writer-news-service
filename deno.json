@@ -5,6 +5,9 @@
   "tasks": {
     "start": "deno run --allow-net --watch main.ts"
   },
+  "fmt": {
+    "singleQuote": true
+  },
   "deploy": {
     "project": "bw-whats-new",
     "exclude": [
@@ -12,8 +15,5 @@
     ],
     "include": [],
     "entrypoint": "main.ts"
-  },
-  "fmt": {
-    "singleQuote": true
   }
 }

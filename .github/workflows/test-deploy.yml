@@ -1,0 +1,41 @@
+name: Test and Deploy
+
+on: [push, pull_request]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Check formatting
+        run: deno fmt --check
+
+      - name: Run linting
+        run: deno lint
+
+      - name: Run tests
+        run: deno test -N
+
+      - name: Deploy to staging
+        if: github.ref != 'refs/heads/main'
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+        run: |
+          deno install -A jsr:@deno/deployctl --global
+          deployctl deploy
+
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+        run: |
+          deno install -A jsr:@deno/deployctl --global
+          deployctl deploy --prod

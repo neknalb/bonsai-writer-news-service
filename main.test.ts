@@ -38,13 +38,13 @@ Deno.test('Route /news returns available news ordered by date', async () => {
     result: [
       {
         date: '2023-04-01',
-        title: 'April Fools Day',
+        title: 'A humorous article about April Fools Day.',
         content: 'Hello world! LOL',
       },
       {
         date: '2023-04-02',
         title: 'Birthday',
-        content: 'Today, Michaela has brithday!',
+        content: 'Today, Michaela has birthday!',
       },
     ],
   });

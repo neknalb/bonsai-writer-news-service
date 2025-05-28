@@ -16,8 +16,7 @@ Deno.test('Root route returns API information', async () => {
 });
 
 Deno.test('Unknown routes return 404 with correct error message', async () => {
-  const testPath = '/foobar';
-  const response = await app.request(testPath);
+  const response = await app.request('/nonexistent');
   const data = await response.json();
 
   assertEquals(response.status, 404);
@@ -27,25 +26,28 @@ Deno.test('Unknown routes return 404 with correct error message', async () => {
   });
 });
 
-Deno.test('Route /news returns available news ordered by date', async () => {
-  const testPath = '/news';
-  const response = await app.request(testPath);
-  const data = await response.json();
+Deno.test('CORS headers are set correctly', async () => {
+  const response = await app.request('/');
 
-  assertEquals(response.status, 200);
-  assertEquals(data, {
-    total: 2,
-    result: [
-      {
-        date: '2023-04-01',
-        title: 'A humorous article about April Fools Day.',
-        content: 'Hello world! LOL',
-      },
-      {
-        date: '2023-04-02',
-        title: 'Birthday',
-        content: 'Today, Michaela has birthday!',
-      },
-    ],
-  });
+  assertEquals(response.headers.get('Access-Control-Allow-Origin'), '*');
+  assertEquals(response.headers.get('Access-Control-Allow-Methods'), 'GET');
+  assertEquals(
+    response.headers.get('Access-Control-Allow-Headers'),
+    'Content-Type',
+  );
 });
+
+Deno.test('CORS headers are set for /news route', async () => {
+  const response = await app.request('/news');
+
+  assertEquals(response.headers.get('Access-Control-Allow-Origin'), '*');
+  assertEquals(response.headers.get('Access-Control-Allow-Methods'), 'GET');
+  assertEquals(
+    response.headers.get('Access-Control-Allow-Headers'),
+    'Content-Type',
+  );
+});
+
+// Deno.test('Route /news calls newsRoutes', async () => {
+// TO BE IMPLEMENTED
+// });

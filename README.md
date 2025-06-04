@@ -1,5 +1,7 @@
 # Bonsai Writer News Service
 
+[![](https://img.shields.io/github/actions/workflow/status/neknalb/bonsai-writer-news-service/test-and-deploy.yaml?style=flat)](https://github.com/neknalb/bonsai-writer-news-service/actions/workflows/test-and-deploy.yaml)
+
 News about development on Bonsai Writer provided via a simple REST API. Actually
 there's only one single GET endpoint (`/news`) that provides all available news.
 

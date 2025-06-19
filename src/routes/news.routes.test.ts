@@ -1,6 +1,6 @@
 import { assertEquals } from 'jsr:@std/assert';
-import { createNewsRoutes } from './newsRoutes.ts';
-import { NewsOfADate } from '../data/newsData.ts';
+import { createNewsRoutes } from './news.routes.ts';
+import { NewsOfADate } from '../services/news.service.ts';
 
 // Mock-Daten für Tests
 const mockNews: NewsOfADate[] = [

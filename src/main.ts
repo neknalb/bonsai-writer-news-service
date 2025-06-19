@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import newsRoutes from './routes/newsRoutes.ts';
+import newsRoutes from './routes/news.routes.ts';
 
 // Create Hono app
 const app = new Hono();

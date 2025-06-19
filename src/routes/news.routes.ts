@@ -1,5 +1,8 @@
 import { Hono } from 'hono';
-import { getAllNewsOrderedByDate, NewsOfADate } from '../data/newsData.ts';
+import {
+  getAllNewsOrderedByDate,
+  NewsOfADate,
+} from '../services/news.service.ts';
 
 interface AllNewsResponse {
   total: number;

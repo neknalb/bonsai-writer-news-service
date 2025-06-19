@@ -1,5 +1,5 @@
 import { assertEquals } from 'jsr:@std/assert';
-import { createNewsRoutes } from '../routes/newsRoutes.ts';
+import { createNewsRoutes } from './newsRoutes.ts';
 import { NewsOfADate } from '../data/newsData.ts';
 
 // Mock-Daten für Tests

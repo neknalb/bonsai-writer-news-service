@@ -12,20 +12,23 @@ interface AllNewsResponse {
 // Create a newsRoutes object. Optionally you can inject a `dataProvider`.
 export function createNewsRoutes(
   // Per default use `getAllNewsOrderedByDate` as `dataProvider`
-  dataProvider: () => Array<NewsOfADate> = getAllNewsOrderedByDate,
+  dataProvider: () => Promise<Array<NewsOfADate>> = getAllNewsOrderedByDate,
 ): Hono {
   const newsRoutes = new Hono();
 
   // Route for all available dates
-  newsRoutes.get('/', (c) => {
-    const news = dataProvider();
+  newsRoutes.get('/', async (c) => {
+    try {
+      const news = await dataProvider();
 
-    const response: AllNewsResponse = {
-      total: news.length,
-      result: news,
-    };
-
-    return c.json(response);
+      const response: AllNewsResponse = {
+        total: news.length,
+        result: news,
+      };
+      return c.json(response);
+    } catch {
+      return c.json({ error: 'Failed to fetch news' }, 500);
+    }
   });
 
   return newsRoutes;

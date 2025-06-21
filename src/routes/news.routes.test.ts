@@ -3,16 +3,26 @@ import { createNewsRoutes } from './news.routes.ts';
 import { NewsOfADate } from '../services/news.service.ts';
 
 // Mock-Daten für Tests
-const mockNews: NewsOfADate[] = [
-  { date: '2024-01-01', title: 'Mock Title 1', content: 'Mock Content 1' },
-  { date: '2024-04-02', title: 'Mock Title 2', content: 'Mock Content 2' },
+const mockData: Array<NewsOfADate> = [
+  {
+    date: '2024-01-01',
+    title: 'Mock Title 1',
+    content: 'Mock Content 1',
+  },
+  {
+    date: '2024-04-02',
+    title: 'Mock Title 2',
+    content: 'Mock Content 2',
+  },
 ];
 
 Deno.test({
   name: 'GET / returns all news ordered by date',
   async fn() {
     // Erstelle Routes mit Mock-Datenquelle
-    const newsRoutes = createNewsRoutes(() => mockNews);
+    const newsRoutes = createNewsRoutes(
+      () => Promise.resolve(mockData),
+    );
 
     const response = await newsRoutes.request('/');
     const responseData = await response.json();
@@ -29,7 +39,9 @@ Deno.test({
 Deno.test({
   name: 'GET / returns correct structure',
   async fn() {
-    const newsRoutes = createNewsRoutes(() => mockNews);
+    const newsRoutes = createNewsRoutes(
+      () => Promise.resolve(mockData),
+    );
 
     const response = await newsRoutes.request('/');
     const responseData = await response.json();
@@ -48,7 +60,9 @@ Deno.test({
 Deno.test({
   name: 'GET / handles empty news data',
   async fn() {
-    const newsRoutes = createNewsRoutes(() => []);
+    const newsRoutes = createNewsRoutes(
+      () => Promise.resolve([]),
+    );
 
     const response = await newsRoutes.request('/');
     const responseData = await response.json();
@@ -60,7 +74,9 @@ Deno.test({
 });
 
 Deno.test('Route /nonexistent returns 404', async () => {
-  const newsRoutes = createNewsRoutes(() => []);
+  const newsRoutes = createNewsRoutes(
+    () => Promise.resolve([]),
+  );
   const response = await newsRoutes.request('/nonexistent');
 
   assertEquals(response.status, 404);

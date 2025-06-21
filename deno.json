@@ -3,7 +3,7 @@
     "hono": "jsr:@hono/hono@^4.7.10"
   },
   "tasks": {
-    "start": "deno run --allow-net --watch src/main.ts"
+    "start": "deno run --allow-net --allow-read --watch src/main.ts"
   },
   "fmt": {
     "singleQuote": true
@@ -14,6 +14,6 @@
       "**/node_modules"
     ],
     "include": [],
-    "entrypoint": "main.ts"
+    "entrypoint": "src/main.ts"
   }
 }
